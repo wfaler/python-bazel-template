@@ -25,9 +25,20 @@ python_register_toolchains(
     name = "python_3_11",
     # Available versions are listed in @rules_python//python:versions.bzl.
     # We recommend using the same version your team is already standardized on.
-    python_version = "3.11",
+    python_version = "3.11.1",
 )
 
 load("@python_3_11//:defs.bzl", "interpreter")
 
-load("@rules_python//python:pip.bzl", "pip_parse")
+# load("@rules_python//python:pip.bzl", "pip_parse")
+
+# # Create a central repo that knows about the dependencies needed from
+# # requirements_lock.txt.
+# pip_parse(
+#    name = "my_deps",
+#    requirements_lock = "requirements.txt",
+# )
+# # Load the starlark macro, which will define your dependencies.
+# load("@my_deps//:requirements.bzl", "install_deps")
+# # Call it to define repos for your requirements.
+# install_deps()
