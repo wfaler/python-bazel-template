@@ -1,6 +1,10 @@
+load("@my_deps//:requirements.bzl", "requirement")
+
+
 py_library(
     name = "lib",
     srcs = ["lib.py"],
+    deps = [requirement("numpy"), requirement("requests")],
     srcs_version = "PY3",
 )
 
