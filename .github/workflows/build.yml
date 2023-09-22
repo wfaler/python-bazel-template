@@ -21,3 +21,4 @@ jobs:
       DOCKER_REPO: ''
       DOCKER_USER: ''
       DOCKER_PASSWORD: ''
+      DOCKER_IMAGE: ''
