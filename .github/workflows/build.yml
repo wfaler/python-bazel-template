@@ -1,4 +1,4 @@
-name: Build
+name: Build, Test & Push Artefact
 on:
   push:
     branches:
@@ -21,6 +21,6 @@ jobs:
             path: "~/.cache/bazel"
             key: bazel
       - name: Test
-        run: bazel test //...
+        run: bazel test  --test_output=all //...
       - name: Build
-        run: bazel test //...
+        run: bazel build //...
