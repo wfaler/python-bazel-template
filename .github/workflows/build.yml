@@ -17,7 +17,6 @@ jobs:
     uses: ./.github/workflows/build_template.yml
     secrets: inherit
     with:
-      DOCKER_IMAGE: foo
       DOCKER_REPO: ''
       DOCKER_USER: ''
       DOCKER_PASSWORD: ''
