@@ -34,7 +34,8 @@ jobs:
         value: ${{fromJson(inputs.docker_images)}}
     steps:
       - name: Use matrix value
-        run: echo "Current matrix value: ${{ matrix.value }}"
+        run: |
+          echo "Current matrix value: ${{ matrix.value }}"
       - name: Checkout
         uses: actions/checkout@v3
         with:
