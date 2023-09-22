@@ -1,0 +1,109 @@
+name: Build, Test & Push Artefact
+permissions:
+  id-token: write
+  contents: write
+  checks: write
+on:
+  workflow_call:
+    inputs:
+      docker_images:
+        description: 'Docker images to build and push'
+        required: true
+        type: string  
+      DOCKER_REPO:
+        type: string
+        default: ''
+        description: 'Docker repository to push to'
+        required: false
+      DOCKER_USER:
+        type: string
+        default: ''
+        description: 'Docker username'
+        required: false
+      DOCKER_PASSWORD:
+        type: string
+        default: ''
+        description: 'Docker password'
+        required: false
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get short git-hash
+        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+      - name: Get Previous tag
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1.3.0"
+        with:
+          fallback: 0.0.0 
+      - name: Get next minor version
+        id: semvers
+        uses: "WyriHaximus/github-action-next-semvers@v1"
+        with:
+          version: ${{ steps.previoustag.outputs.tag }}
+      - name: Set build version
+        run: echo "VERSION=${{ steps.semvers.outputs.minor }}-${{env.SHORT_SHA}}" >> $GITHUB_ENV
+      - name: Setup Bazelisk
+        uses: bazelbuild/setup-bazelisk@v2
+      - name: Mount bazel cache  
+        uses: actions/cache@v3
+        with:
+            path: "~/.cache/bazel"
+            key: bazel
+      - name: Test
+        run: bazel test  --test_output=all //...
+      - name: Build
+        run: bazel build //...
+      - name: Docker login
+        if: inputs.DOCKER_USER != ''
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ inputs.DOCKER_REPO }}
+          username: ${{ inputs.DOCKER_USER }}
+          password: ${{ inputs.DOCKER_PASSWORD }}
+      - name: Build docker image
+        run: |
+          ls -ltr bazel-bin
+          OLD_IFS="$IFS"
+          IFS=","
+
+          # Split the input variable and iterate over the values
+          for value in ${{inputs.docker_images}}; do
+            docker build -f ${value}.Dockerfile -t ${{ inputs.DOCKER_REPO }}/${value}:${{env.VERSION}} .
+          done
+
+          # Restore the original IFS value
+          IFS="$OLD_IFS"
+          
+      - name: Push docker image
+        if: inputs.DOCKER_USER != ''    
+        run: |
+          OLD_IFS="$IFS"
+          IFS=","
+
+          # Split the input variable and iterate over the values
+          for value in ${{inputs.docker_images}}; do
+            docker push ${{ inputs.DOCKER_REPO }}/${value}:${{env.VERSION}} .
+          done
+
+          # Restore the original IFS value
+          IFS="$OLD_IFS"
+      - name: Bump version and push tag
+        if: github.ref == 'refs/heads/master'
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{env.VERSION}}
+      - name: Create a GitHub release
+        if: github.ref == 'refs/heads/master'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{env.VERSION}}
+          name: Release ${{env.VERSION}}
+          body: ${{ steps.tag_version.outputs.changelog }}

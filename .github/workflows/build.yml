@@ -1,26 +1,23 @@
-name: Build
+name: Build, Test & Push Artefact
+permissions:
+  id-token: write
+  contents: write
+  actions: read
+  checks: write
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
-  test-build-push-artefact:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup Bazelisk
-        uses: bazelbuild/setup-bazelisk@v2
-      - name: Mount bazel cache  
-        uses: actions/cache@v3
-        with:
-            path: "~/.cache/bazel"
-            key: bazel
-      - name: Test
-        run: bazel test //...
-      - name: Build
-        run: bazel test //...
+  build-test-push:
+    uses: ./.github/workflows/build_template.yml
+    secrets: inherit
+    with:
+      docker_images: "pyimage" # define array of images to be built, comma-separated. Requires [imagename].Dockerfile files in root directory and names image [imagename]
+      DOCKER_REPO: 'ghcr.io/username'
+      DOCKER_USER: ''
+      DOCKER_PASSWORD: ''
