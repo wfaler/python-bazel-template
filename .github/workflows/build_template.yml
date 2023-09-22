@@ -94,14 +94,14 @@ jobs:
           # Restore the original IFS value
           IFS="$OLD_IFS"
       - name: Bump version and push tag
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{env.VERSION}}
       - name: Create a GitHub release
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         uses: ncipollo/release-action@v1
         with:
           tag: ${{env.VERSION}}
