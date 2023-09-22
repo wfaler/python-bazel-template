@@ -20,6 +20,6 @@ make test # run the tests
 ## Github Actions
 This also includes a Github Actions workflow that runs the tests, builds a docker image on push and pull requests.
 Most of it should be self-explanatory, but the `docker_images` parameter is worth explaining:
-This takes a JSON array of strings, which will be shaped into the respective docker image in the form of:
+This takes a array of strings, comma-separated, which will be shaped into the respective docker image in the form of:
 `image-name: image-name.Dockerfile`, where `image-name` will be used as the ultimate name, and the Dockerfile built for it has the filename `image-name.Dockerfile`.
 This allows for multiple docker images to be built from the same repository, and the Dockerfile to be named after the image it builds.
