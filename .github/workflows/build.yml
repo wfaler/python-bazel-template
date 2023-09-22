@@ -14,7 +14,7 @@ on:
 
 jobs:
   call-job:
-    uses: ./.github/workflows/build_template.yml@GH-actions
+    uses: ./.github/workflows/build_template.yml
     secrets: inherit
     with:
       DOCKER_IMAGE: foo
