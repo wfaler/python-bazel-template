@@ -4,9 +4,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # Update the SHA and VERSION to the lastest version available here:
 # https://github.com/bazelbuild/rules_python/releases.
 
-SHA="84aec9e21cc56fbc7f1335035a71c850d1b9b5cc6ff497306f84cced9a769841"
+SHA="5868e73107a8e85d8f323806e60cad7283f34b32163ea6ff1020cf27abef6036"
 
-VERSION="0.23.1"
+VERSION="0.25.0"
 
 http_archive(
     name = "rules_python",
@@ -25,7 +25,7 @@ python_register_toolchains(
     name = "python_3_11",
     # Available versions are listed in @rules_python//python:versions.bzl.
     # We recommend using the same version your team is already standardized on.
-    python_version = "3.11.1",
+    python_version = "3.11",
 )
 
 load("@python_3_11//:defs.bzl", "interpreter")

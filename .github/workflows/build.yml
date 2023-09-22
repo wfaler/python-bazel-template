@@ -1,0 +1,26 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test-build-push-artefact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Bazelisk
+        uses: bazelbuild/setup-bazelisk@v2
+      - name: Mount bazel cache  
+        uses: actions/cache@v3
+        with:
+            path: "~/.cache/bazel"
+            key: bazel
+      - name: Test
+        run: bazel test //...
+      - name: Build
+        run: bazel test //...
