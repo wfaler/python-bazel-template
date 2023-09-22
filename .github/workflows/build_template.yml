@@ -82,7 +82,7 @@ jobs:
           password: ${{ inputs.DOCKER_PASSWORD }}
       - name: Build docker image
         run: |
-          docker build ${{matrix.value}}.Dockerfile -t ${{ inputs.DOCKER_REPO }}/${{matrix.value}}:${{env.VERSION}} .
+          docker build -f ${{matrix.value}}.Dockerfile -t ${{ inputs.DOCKER_REPO }}/${{matrix.value}}:${{env.VERSION}} .
       - name: Push docker image
         if: inputs.DOCKER_USER != ''    
         run: |
