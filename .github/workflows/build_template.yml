@@ -6,6 +6,10 @@ permissions:
 on:
   workflow_call:
     inputs:
+      docker_images:
+        description: 'Docker images to build and push'
+        required: true
+        type: string  
       DOCKER_REPO:
         type: string
         default: ''
@@ -21,16 +25,16 @@ on:
         default: ''
         description: 'Docker password'
         required: false
-      IMAGE_NAME:
-        type: string
-        default: ''
-        description: 'Docker image name'
-        required: false
 
 jobs:
   test-build-push-artefact:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        value: ${{fromJson(inputs.docker_images)}}
     steps:
+      - name: Use matrix value
+        run: echo "Current matrix value: ${{ matrix.value }}"
       - name: Checkout
         uses: actions/checkout@v3
         with:
