@@ -16,17 +16,19 @@ jobs:
         with:
           fetch-depth: 0
       - name: Get short git-hash
-        run: echo ::set-env name=GIT_HASH::$(git rev-parse --short HEAD)
-      - name: 'Get Previous tag'
+        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> GITHUB_ENV
+      - name: Get Previous tag
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1.3.0"
         with:
           fallback: 1.0.0 # Optional fallback tag to use when no tag can be found
-      - name: 'Get next minor version'
+      - name: Get next minor version
         id: semvers
         uses: "WyriHaximus/github-action-next-semvers@v1"
         with:
           version: ${{ steps.previoustag.outputs.tag }}
+      - name: Set build version
+        run: echo ${{ steps.semvers.outputs.minor }}-${{env.SHORT_SHA}}
       - name: Setup Bazelisk
         uses: bazelbuild/setup-bazelisk@v2
       - name: Mount bazel cache  
