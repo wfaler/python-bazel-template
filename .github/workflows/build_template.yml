@@ -29,9 +29,6 @@ on:
 jobs:
   test-build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        value: ${{fromJson(inputs.docker_images)}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -72,11 +69,30 @@ jobs:
       - name: Build docker image
         run: |
           ls -ltr bazel-bin
-          docker build -f ${{matrix.value}}.Dockerfile -t ${{ inputs.DOCKER_REPO }}/${{matrix.value}}:${{env.VERSION}} .
+          OLD_IFS="$IFS"
+          IFS=","
+
+          # Split the input variable and iterate over the values
+          for value in ${{inputs.docker_images}}; do
+            docker build -f ${value}.Dockerfile -t ${{ inputs.DOCKER_REPO }}/${value}:${{env.VERSION}} .
+          done
+
+          # Restore the original IFS value
+          IFS="$OLD_IFS"
+          
       - name: Push docker image
         if: inputs.DOCKER_USER != ''    
         run: |
-          docker push ${{ inputs.DOCKER_REPO }}/${{matrix.value}}:${{env.VERSION}}
+          OLD_IFS="$IFS"
+          IFS=","
+
+          # Split the input variable and iterate over the values
+          for value in ${{inputs.docker_images}}; do
+            docker push ${{ inputs.DOCKER_REPO }}/${value}:${{env.VERSION}} .
+          done
+
+          # Restore the original IFS value
+          IFS="$OLD_IFS"
       - name: Bump version and push tag
         if: github.ref == 'refs/heads/master'
         id: tag_version
