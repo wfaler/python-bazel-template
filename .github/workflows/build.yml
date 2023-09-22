@@ -18,7 +18,7 @@ jobs:
       - name: Setup dev packages
         run: |
           sudo apt update
-          sudo apt install -y libssl-dev build-essentials
+          sudo apt install -y libssl-dev build-essential
       - name: Mount bazel cache  
         uses: actions/cache@v3
         with:
