@@ -1,42 +1,23 @@
 name: Build, Test & Push Artefact
+permissions:
+  id-token: write
+  contents: write
+  actions: read
+  checks: write
 on:
   push:
     branches:
-      - "*"
-  # pull_request:
-  #   branches:
-  #     - master
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  test-build-push-artefact:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Get short git-hash
-        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-      - name: Get Previous tag
-        id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1.3.0"
-        with:
-          fallback: 0.0.0 
-      - name: Get next minor version
-        id: semvers
-        uses: "WyriHaximus/github-action-next-semvers@v1"
-        with:
-          version: ${{ steps.previoustag.outputs.tag }}
-      - name: Set build version
-        run: echo ${{ steps.semvers.outputs.minor }}-${{env.SHORT_SHA}}
-      - name: Setup Bazelisk
-        uses: bazelbuild/setup-bazelisk@v2
-      - name: Mount bazel cache  
-        uses: actions/cache@v3
-        with:
-            path: "~/.cache/bazel"
-            key: bazel
-      - name: Test
-        run: bazel test  --test_output=all //...
-      - name: Build
-        run: bazel build //...
+  call-job:
+    uses: ./.github/workflows/build_template.yml@GH-actions
+    secrets: inherit
+    with:
+      DOCKER_IMAGE: foo
+      DOCKER_REPO: ''
+      DOCKER_USER: ''
+      DOCKER_PASSWORD: ''
