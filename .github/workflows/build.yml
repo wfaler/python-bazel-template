@@ -17,7 +17,7 @@ jobs:
     uses: ./.github/workflows/build_template.yml
     secrets: inherit
     with:
-      docker_images: "['image1', 'image2']"
-      DOCKER_REPO: ''
+      docker_images: "['pyimage']" # define array of images to be built. Requires [imagename].Dockerfile files in root directory and names image [imagename]
+      DOCKER_REPO: 'ghcr.io/username/'
       DOCKER_USER: ''
       DOCKER_PASSWORD: ''
