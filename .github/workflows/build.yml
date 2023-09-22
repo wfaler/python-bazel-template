@@ -18,6 +18,6 @@ jobs:
     secrets: inherit
     with:
       docker_images: "['pyimage']" # define array of images to be built. Requires [imagename].Dockerfile files in root directory and names image [imagename]
-      DOCKER_REPO: 'ghcr.io/username/'
+      DOCKER_REPO: 'ghcr.io/username'
       DOCKER_USER: ''
       DOCKER_PASSWORD: ''
