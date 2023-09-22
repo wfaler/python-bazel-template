@@ -37,6 +37,7 @@ load("@rules_python//python:pip.bzl", "pip_parse")
 pip_parse(
    name = "my_deps",
    requirements_lock = "//:requirements.txt",
+   python_interpreter_target = interpreter,
 )
 # Load the starlark macro, which will define your dependencies.
 load("@my_deps//:requirements.bzl", "install_deps")
