@@ -23,3 +23,8 @@ Most of it should be self-explanatory, but the `docker_images` parameter is wort
 This takes a array of strings, comma-separated, which will be shaped into the respective docker image in the form of:
 `image-name: image-name.Dockerfile`, where `image-name` will be used as the ultimate name, and the Dockerfile built for it has the filename `image-name.Dockerfile`.
 This allows for multiple docker images to be built from the same repository, and the Dockerfile to be named after the image it builds.
+
+## TODO
+
+- [] Pass secrets properly
+- [] Extract hermetically built binary to docker imagee
