@@ -47,7 +47,11 @@ jobs:
         with:
           version: ${{ steps.previoustag.outputs.tag }}
       - name: Set build version
+        if: github.ref != 'refs/heads/main'
         run: echo "VERSION=${{ steps.semvers.outputs.minor }}-${{env.SHORT_SHA}}" >> $GITHUB_ENV
+      - name: Set build version (main)
+        if: github.ref == 'refs/heads/main'
+        run: echo "VERSION=${{ steps.semvers.outputs.minor }}" >> $GITHUB_ENV
       - name: Setup Bazelisk
         uses: bazelbuild/setup-bazelisk@v2
       - name: Mount bazel cache  
