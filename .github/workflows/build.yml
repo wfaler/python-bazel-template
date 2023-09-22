@@ -13,10 +13,11 @@ on:
       - main
 
 jobs:
-  call-job:
+  build-test-push:
     uses: ./.github/workflows/build_template.yml
     secrets: inherit
     with:
       DOCKER_REPO: ''
       DOCKER_USER: ''
       DOCKER_PASSWORD: ''
+      IMAGE_NAME: ''
