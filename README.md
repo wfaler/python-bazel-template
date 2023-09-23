@@ -26,4 +26,4 @@ This allows for multiple docker images to be built from the same repository, and
 
 ## TODO
 
-- [] Pass secrets properly
+- [ ] Pass secrets properly
