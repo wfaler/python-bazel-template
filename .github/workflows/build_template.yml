@@ -72,13 +72,15 @@ jobs:
           password: ${{ inputs.DOCKER_PASSWORD }}
       - name: Build docker image
         run: |
-          ls -ltr bazel-bin
+          mkdir tmp
+          cp -r bazel-bin/* tmp
           OLD_IFS="$IFS"
           IFS=","
 
           # Split the input variable and iterate over the values
           for value in ${{inputs.docker_images}}; do
             docker build -f ${value}.Dockerfile -t ${{ inputs.DOCKER_REPO }}/${value}:${{env.VERSION}} .
+            docker run ${{ inputs.DOCKER_REPO }}/${value}:${{env.VERSION}}
           done
 
           # Restore the original IFS value
