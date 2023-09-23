@@ -3,6 +3,7 @@ FROM alpine:3.18
 # in bazel, it will use the interpreter.
 
 workdir /app
+# for a Python binary callled "bin", these are the relevant files to copy for a hermetic build
 RUN mkdir bin.runfiles
 ADD tmp/bin .
 ADD tmp/bin.runfiles bin.runfiles/
