@@ -1,4 +1,4 @@
-FROM alpin:3.18
+FROM alpine:3.18
 # use a python image, in a built setting, the artefacts still rely on an interpreter being installed.
 # in bazel, it will use the interpreter.
 
