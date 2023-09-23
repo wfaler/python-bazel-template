@@ -73,7 +73,7 @@ jobs:
       - name: Build docker image
         run: |
           mkdir tmp
-          cp -r bazel-bin/* tmp
+          cp -rL bazel-bin/* tmp
           OLD_IFS="$IFS"
           IFS=","
 
