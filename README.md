@@ -27,4 +27,3 @@ This allows for multiple docker images to be built from the same repository, and
 ## TODO
 
 - [] Pass secrets properly
-- [] Extract hermetically built binary to docker imagee

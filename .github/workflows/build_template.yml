@@ -81,7 +81,6 @@ jobs:
           # Split the input variable and iterate over the values
           for value in ${{inputs.docker_images}}; do
             docker build -f ${value}.Dockerfile -t ${{ inputs.DOCKER_REPO }}/${value}:${{env.VERSION}} .
-            docker run ${{ inputs.DOCKER_REPO }}/${value}:${{env.VERSION}}
           done
 
           # Restore the original IFS value
